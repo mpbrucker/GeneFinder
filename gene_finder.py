@@ -7,7 +7,7 @@ YOUR HEADER COMMENT HERE
 """
 
 import random
-from amino_acids import aa, codons, aa_table   # you may find these useful
+from amino_acids import codons, aa_table   # you may find these useful
 from load import load_seq
 import re
 
@@ -213,7 +213,7 @@ def gene_finder(dna):
 
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-    # dna_test = load_seq("./data/X73525.fa")
-    # print(gene_finder(dna_test))
+    # import doctest
+    dna = load_seq("./data/X73525.fa")
+    print(gene_finder(dna))
+    # doctest.testmod(verbose=True)
