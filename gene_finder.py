@@ -193,7 +193,7 @@ def coding_strand_to_AA(dna):
         >>> coding_strand_to_AA("ATGCCCGCTTT")
         'MPA'
     """
-    # Finds the indices of all codons, and returns a list of the three-letter substrings starting at those indices
+    # Finds the indices of all codons, and generates a list of the three-letter substrings starting at those indices
     codons = [dna[idx*3:idx*3+3] for idx in range(0, len(dna)//3)]
     # Returns a list of the amino acids corresponding to each codon
     return ''.join([aa_table[codon] for codon in codons])
@@ -213,7 +213,7 @@ def gene_finder(dna):
 
 
 if __name__ == "__main__":
-    # import doctest
+    import doctest
+    doctest.testmod(verbose=True)
     dna = load_seq("./data/X73525.fa")
     print(gene_finder(dna))
-    # doctest.testmod(verbose=True)

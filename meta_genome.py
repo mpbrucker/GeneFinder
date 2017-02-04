@@ -1,10 +1,10 @@
 from load import load_nitrogenase_seq, load_metagenome
 import doctest
-from multiprocessing import Pool, Lock, Manager
-from functools import partial
+
+nitrogenase = load_nitrogenase_seq()
 
 
-def longest_common_substring(string2, lock, old_longest, in_string):
+def longest_common_substring(string1, string2):
     """
     Computes the longest common substring between two strings.
 
@@ -23,10 +23,6 @@ def longest_common_substring(string2, lock, old_longest, in_string):
     >>> longest_common_substring("xabcxdef","jabcjdef")
     ['abc', 'def']
     """
-    # print('Nitrogenase: ',string2)
-    string1 = in_string[1]
-    # print('Metagenome: ',string1)
-    # Builds blank array of dimensions str1 len x str 2 len
     substring_array = [[0 for x in range(len(string1))] for y in range(len(string2))]
     max_sub = 0  # length of longest substring
     longest = []  # The array of longest substrings
@@ -44,13 +40,7 @@ def longest_common_substring(string2, lock, old_longest, in_string):
                     longest.append(string1[x-max_sub+1:x+1])
             else:
                 substring_array[y][x] == 0
-    lock.acquire()
-    # print(longest)
-    if (len(longest)) > len(old_longest[1]):
-        old_longest[0] = in_string[0]
-        old_longest[1] = longest
-    # print(old_longest)
-    lock.release()
+    return longest
 
 
 def find_possible_nitrogenase():
@@ -58,28 +48,19 @@ def find_possible_nitrogenase():
     Finds the best match for the nitrogenase genome out of the metagenome by finding
     the genome with the longest common substring between the two.
     """
-    nitrogenase = load_nitrogenase_seq()
+    max_len = 0
     metagenome = load_metagenome()
-    print("Length: ", len(metagenome))
-    process_pool = Pool(15)
-    m = Manager()
-    l = m.Lock()
-    metagenome = metagenome[:25]
-    cur_longest = ['', '']
-    lc_sub = partial(longest_common_substring, nitrogenase, l, cur_longest)
-    process_pool.map(lc_sub, metagenome)
-    process_pool.close()
-    process_pool.join()
-    print(cur_longest)
-
-    # for genome in metagenome:  # Iterate through all genomes in the metagenome
-    #
-    #     lc_substring = longest_common_substring(nitrogenase, genome[1])
-    #     if len(lc_substring) > max_len:  # there is a new longest common substring
-    #         max_len = len(lc_substring)
-    #         best_match = genome
+    # Nice to use the line below for demonstration purposes, otherwise it takes a LONG time
+    # metagenome = metagenome[:25]
+    for genome in metagenome:  # Iterate through all genomes in the metagenome
+        lc_substring = longest_common_substring(nitrogenase, genome[1])  # Get longest substring
+        if len(lc_substring) > max_len:  # there is a new longest common substring
+            max_len = len(lc_substring)
+            best_match = genome  # There is a new best match
+    return best_match
 
 
 if __name__ == '__main__':
-    find_possible_nitrogenase()
-    # doctest.testmod()
+    doctest.testmod()
+    best = find_possible_nitrogenase()
+    print(best)
