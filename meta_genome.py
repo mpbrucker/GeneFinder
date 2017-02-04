@@ -1,3 +1,11 @@
+"""
+Based on a metagenome sequence, finds the genes most likely to
+correspond to the nitrogenase gene by using longest common substring.
+
+@author: Matt Brucker
+
+"""
+
 from load import load_nitrogenase_seq, load_metagenome
 import doctest
 
