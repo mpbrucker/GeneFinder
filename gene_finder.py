@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-YOUR HEADER COMMENT HERE
+Analyzes strings of nucleotides to find chains of amino acids.
+Based on an imported string of nucleotides, finds the most likely
+coded amino acids.
 
 @author: Matt Brucker
 
